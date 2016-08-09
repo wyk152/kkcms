@@ -37,7 +37,7 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public Role findObjectById(Serializable id) {
-		return roleDao.findById(id);
+		return roleDao.findObjectById(id);
 	}
 
 	@Override

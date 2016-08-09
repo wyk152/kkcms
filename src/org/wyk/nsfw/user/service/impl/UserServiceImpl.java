@@ -2,6 +2,7 @@ package org.wyk.nsfw.user.service.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -17,76 +18,49 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.wyk.main.exception.ServiceException;
 import org.wyk.main.util.ExcelUtil;
+import org.wyk.nsfw.role.entity.Role;
 import org.wyk.nsfw.user.dao.UserDao;
 import org.wyk.nsfw.user.entity.User;
+import org.wyk.nsfw.user.entity.UserRole;
+import org.wyk.nsfw.user.entity.UserRoleId;
 import org.wyk.nsfw.user.service.UserService;
-/**
- * 
- * @author wyk
- * @time 2016年6月2日
- */
+
+
 @Service("userService")
 public class UserServiceImpl implements UserService {
 	
-	@Resource
-	UserDao userDao;
-	
-	@Override
-	public void save(User entity) {
-		// TODO Auto-generated method stub
-		userDao.save(entity);
-	}
-
+	@Resource 
+	private UserDao userDao;
 
 	@Override
-	public User findById(String id) {
-		// TODO Auto-generated method stub
-		return userDao.findById(id);
+	public void save(User user) {
+		userDao.save(user);
 	}
 
 	@Override
-	public void deleteById(String id) {
-		// TODO Auto-generated method stub
+	public void update(User user) {
+		userDao.update(user);
+	}
+
+	@Override
+	public void delete(Serializable id) {
 		userDao.delete(id);
+		//删除用户对应的所有权限
+		userDao.deleteUserRoleByUserId(id);
 	}
 
 	@Override
-	public List<User> findObjects() {
-		// TODO Auto-generated method stub
+	public User findObjectById(Serializable id) {
+		return userDao.findObjectById(id);
+	}
+
+	@Override
+	public List<User> findObjects() throws ServiceException {
 		return userDao.findObjects();
 	}
 
 	@Override
-	public void update(User entity) {
-		// TODO Auto-generated method stub
-		userDao.update(entity);
-	}
-
-	
-	public User findByAccount1(User user) throws ServiceException {
-		try {
-			//int i = 1/0;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw new ServiceException("servicechu出错"+ e.getMessage());
-		}
-		// TODO Auto-generated method stub
-		return userDao.findByAccount(user);
-	}
-	public User findByAccount(User user) throws ServiceException {
-		// TODO Auto-generated method stub
-		return userDao.findByAccount(user);
-	}
-
-	/**
-	 * @param userList 需要导出的数据
-	 * @param outputStream 输出到浏览器的流
-	 * @time 2016年6月5日
-	 * @return 
-	 */
-	@Override
 	public void exportExcel(List<User> userList, ServletOutputStream outputStream) {
-		
 		ExcelUtil.exportUserExcel(userList, outputStream);
 	}
 
@@ -107,19 +81,19 @@ public class UserServiceImpl implements UserService {
 					Row row = sheet.getRow(k);
 					user = new User();
 					//用户名
-					Cell cell = row.getCell(0);
-					user.setName(cell.getStringCellValue());
+					Cell cell0 = row.getCell(0);
+					user.setName(cell0.getStringCellValue());
 					//帐号
-					cell = row.getCell(1);
-					user.setAccount(cell.getStringCellValue());
+					Cell cell1 = row.getCell(1);
+					user.setAccount(cell1.getStringCellValue());
 					//所属部门
-					cell = row.getCell(2);
-					user.setDept(cell.getStringCellValue());
+					Cell cell2 = row.getCell(2);
+					user.setDept(cell2.getStringCellValue());
 					//性别
-					cell = row.getCell(3);
-					user.setGender(cell.getStringCellValue().equals("男"));
+					Cell cell3 = row.getCell(3);
+					user.setGender(cell3.getStringCellValue().equals("男"));
 					//手机号
-			/*		String mobile = "";
+					String mobile = "";
 					Cell cell4 = row.getCell(4);
 					try {
 						mobile = cell4.getStringCellValue();
@@ -136,7 +110,7 @@ public class UserServiceImpl implements UserService {
 					Cell cell6 = row.getCell(6);
 					if(cell6.getDateCellValue() != null){
 						user.setBirthday(cell6.getDateCellValue());
-					}*/
+					}
 					//默认用户密码为 123456
 					user.setPassword("123456");
 					//默认用户状态为 有效
@@ -151,13 +125,47 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	
-		
 	}
 
 	@Override
-	public List<User> findByAccountAndId(String id, String account) {
-		// TODO Auto-generated method stub
-		return userDao.findByAccountAndId(id,account);
+	public List<User> findUserByAccountAndId(String id, String account) {
+		return userDao.findUserByAccountAndId(id, account);
 	}
+
+	@Override
+	public void saveUserAndRole(User user, String... roleIds) {
+		//1、保存用户
+		save(user);
+		//2、保存用户对应的角色
+		if(roleIds != null){
+			for(String roleId: roleIds){
+				userDao.saveUserRole(new UserRole(new UserRoleId(new Role(roleId), user.getId())));
+			}
+		}
+	}
+
+	@Override
+	public void updateUserAndRole(User user, String... roleIds) {
+		//1、根据用户删除该用户的所有角色
+		userDao.deleteUserRoleByUserId(user.getId());
+		//2、更新用户
+		update(user);
+		//3、保存用户对应的角色
+		if(roleIds != null){
+			for(String roleId: roleIds){
+				userDao.saveUserRole(new UserRole(new UserRoleId(new Role(roleId), user.getId())));
+			}
+		}
+	}
+
+	@Override
+	public List<UserRole> getUserRolesByUserId(String id) {
+		return userDao.getUserRolesByUserId(id);
+	}
+
+	@Override
+	public List<User> findUserByAccountAndPass(String account, String password) {
+		return userDao.findUsersByAcccountAndPass(account, password);
+	}
+
 }

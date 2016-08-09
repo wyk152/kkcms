@@ -1,23 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
 <hibernate-mapping>
 	<class name="org.wyk.nsfw.user.entity.User" table="user">
 		<id name="id" type="java.lang.String">
-			<column name="id" length="32"></column>
-			<generator class="uuid.hex"></generator>
+			<column name="id" length="32" />
+			<generator class="uuid.hex" />
 		</id>
 		<property name="name" type="java.lang.String">
-			<column name="name" length="20" />
+			<column name="name" length="20" not-null="true" />
 		</property>
 		<property name="dept" type="java.lang.String">
-			<column name="dept" length="20"  />
+			<column name="dept" length="20" not-null="true" />
 		</property>		
 		<property name="account" type="java.lang.String">
-			<column name="account" length="50" />
+			<column name="account" length="50" not-null="true" />
 		</property>
 		<property name="password" type="java.lang.String">
-			<column name="password" length="50" />
+			<column name="password" length="50" not-null="true" />
 		</property>
 		<property name="headImg" type="java.lang.String">
 			<column name="headImg" length="100" />
@@ -41,4 +42,6 @@
 			<column name="memo" length="200" />
 		</property>
 	</class>
+
 </hibernate-mapping>
+	

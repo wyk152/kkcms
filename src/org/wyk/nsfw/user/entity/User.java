@@ -2,13 +2,10 @@ package org.wyk.nsfw.user.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-/**
- * 
- * @author wyk
- * @time 2016年6月2日
- */
-public class User implements Serializable{
+public class User implements Serializable {
+	
 	/**
 	 * 
 	 */
@@ -26,6 +23,7 @@ public class User implements Serializable{
 	private String email;
 	private Date birthday;
 	private String memo;
+	private List<UserRole> userRoles;
 	
 	//用户状态
 	public static String USER_STATE_VALID = "1";//有效
@@ -119,11 +117,10 @@ public class User implements Serializable{
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", dept=" + dept + ", account=" + account + ", name=" + name + ", password="
-				+ password + ", headImg=" + headImg + ", gender=" + gender + ", state=" + state + ", mobile=" + mobile
-				+ ", email=" + email + ", birthday=" + birthday + ", memo=" + memo + "]";
+	public List<UserRole> getUserRoles() {
+		return userRoles;
 	}
-	
+	public void setUserRoles(List<UserRole> userRoles) {
+		this.userRoles = userRoles;
+	}
 }
