@@ -4,9 +4,58 @@
     <%@include file="/common/header.jsp"%>
     <title>用户管理</title>
     <script type="text/javascript" src="${basePath }/js/datepicker/WdatePicker.js"></script>
+        <script type="text/javascript">
+    var vResult = false;
+    	//校验帐号唯一
+    	function doVerify(){
+    		//1、获取帐号
+    		var account = $("#account").val();
+    		if(account != ""){
+    			//2、校验 
+    			$.ajax({
+    				url:"${basePath}/nsfw/user_verifyAccount.action",
+    				data: {"user.account": account, "user.id": "${user.id}"},
+    				type: "post",
+    				async: false,//非异步
+    				success: function(msg){
+    					if("true" != msg){
+    						//帐号已经存在
+    						alert("帐号已经存在。请使用其它帐号！");
+    						//定焦
+    						$("#account").focus();
+    						vResult = false;
+    					} else {
+    						vResult = true;
+    					}
+    				}
+    			});
+    		}
+    	}
+    	//提交表单
+    	function doSubmit(){
+    		var name = $("#name");
+    		if(name.val() == ""){
+    			alert("用户名不能为空！");
+    			name.focus();
+    			return false;
+    		}
+    		var password = $("#password");
+    		if(password.val() == ""){
+    			alert("密码不能为空！");
+    			password.focus();
+    			return false;
+    		}
+    		//帐号校验
+    		doVerify();
+    		if(vResult){
+	    		//提交表单
+	    		document.forms[0].submit();
+    		}
+    	}
+    </script>
 </head>
 <body class="rightBody">
-<form id="form" name="form" action="${basePath }/nsfw/user_save.action" method="post" enctype="multipart/form-data">
+<form id="form" name="form" action="${basePath }/nsfw/user_edit.action" method="post" enctype="multipart/form-data">
     <div class="p_d_1">
         <div class="p_d_1_1">
             <div class="content_info">
@@ -15,78 +64,69 @@
     <table id="baseInfo" width="100%" align="center" class="list" border="0" cellpadding="0" cellspacing="0"  >
         <tr>
             <td class="tdBg" width="200px">所属部门：</td>
-            <td>
-            	<select name="user.dept">
-           		 <option value="部门A">部门A</option>
-           		  <option value="部门A1">部门A1</option>
-           		   <option value="部门A2">部门A2</option>
-           		    <option value="部门A3">部门A3</option>
-            	</select>
-            </td>
+            <td><s:select name="user.dept" list="#{'部门A':'部门A','部门B':'部门B' }"/></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">头像：</td>
             <td>
-                
-                    <img src="${basePath}/upload/${user.headImg}" width="100" height="100"/>
-                
+                <s:if test="%{user.headImg != null && user.headImg != ''}">
+                    <img src="${basePath }/upload/<s:property value='user.headImg'/>" width="100" height="100"/>
+                    <s:hidden name="user.headImg"/>
+                </s:if>
                 <input type="file" name="headImg"/>
             </td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">用户名：</td>
-            <td><input type="text" name="user.name" value="${user.name}"/> </td>
+            <td><s:textfield id="name" name="user.name"/> </td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">帐号：</td>
-            <td><input type="text" name="user.account" value="${user.account}"/></td>
+            <td><s:textfield id="account" name="user.account" onchange="doVerify()"/></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">密码：</td>
-            <td><input type="text" name="user.password" value="${user.account}"/></td>
+            <td><s:textfield id="password" name="user.password"/></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">性别：</td>
-            <td>
-	           <c:if test="${user.gender}">
-	           		男<input type="radio" name="user.gender" checked="checked" value="true"/>
-	       			女<input type="radio" name="user.gender"  value="false"/></c:if> 
-	            <c:if test="${!user.gender}">
-				            男<input type="radio" name="user.gender" value="true"/>
-				            女<input type="radio" name="user.gender" checked="checked" value="false"/></c:if>          
-            </td>
+            <td><s:radio list="#{'true':'男','false':'女'}" name="user.gender"/></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">角色：</td>
-            <td></td>
+            <td>
+            <s:checkboxlist list="#roleList" name="userRoleIds" listKey="roleId" listValue="name"></s:checkboxlist>
+            </td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">电子邮箱：</td>
-            <td><input type="text" name="user.email" value="${user.email}"/></td>
+            <td><s:textfield name="user.email"/></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">手机号：</td>
-            <td><input type="text" name="user.mobile" value="${user.mobile}"/></td>
+            <td><s:textfield name="user.mobile"/></td>
         </tr>        
         <tr>
-            <td class="tdBg" width="200px">生日：</td>       
-            <td><input type="text" id="birthday" name="user.birthday" value="${user.birthday}" readonly="true" onfocus="WdatePicker({'skin':'whyGreen','dateFmt':'yyyy-MM-dd'});" /></td>
+            <td class="tdBg" width="200px">生日：</td>
+            <td>
+            <s:textfield id="birthday" name="user.birthday" readonly="true" 
+            onfocus="WdatePicker({'skin':'whyGreen','dateFmt':'yyyy-MM-dd'});" >
+            	<s:param name="value"><s:date name="user.birthday" format="yyyy-MM-dd"/></s:param>
+            </s:textfield>
+            </td>
         </tr>
 		<tr>
             <td class="tdBg" width="200px">状态：</td>
-             <c:if test="${user.state=='1'}">有效<input type="radio" 
-	            name="user.state" checked="checked" value="1"/></c:if> 
-	            <c:if test="${user.state=='0'}">无效<input type="radio" 
-	            name="user.state" checked="checked" value="0"/></c:if>                   
+            <td><s:radio list="#{'1':'有效','0':'无效'}" name="user.state"/></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">备注：</td>
-            <td><input type="text" name="user.memo" value="${user.memo}"/></td>
+            <td><s:textarea name="user.memo" cols="75" rows="3"/></td>
         </tr>
     </table>
-    <input type="hidden" name="user.id" value="${user.id}"/>
+    <s:hidden name="user.id"/>
     <div class="tc mt20">
-        <input type="submit" class="btnB2" value="保存" />
+        <input type="button" class="btnB2" value="保存" onclick="doSubmit()" />
         &nbsp;&nbsp;&nbsp;&nbsp;
         <input type="button"  onclick="javascript:history.go(-1)" class="btnB2" value="返回" />
     </div>

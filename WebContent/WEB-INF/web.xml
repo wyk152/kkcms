@@ -6,7 +6,7 @@
 		id="WebApp_ID" version="3.0">
   <display-name>Stru_Spring_H</display-name>
   <welcome-file-list>
-    <welcome-file>login.jsp</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
   
   <!-- 注册spring监听器 -->
@@ -18,6 +18,15 @@
   <param-value>classpath:applicationContext.xml</param-value>
   </context-param>
   
+  <!-- 权限过滤器 -->
+  <filter>
+		<filter-name>loginFilter</filter-name>
+		<filter-class>org.wyk.main.filter.Loginfilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>loginFilter</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
   <!-- struts核心过滤器 -->
   <filter>
   	<filter-name>struts</filter-name>

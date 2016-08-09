@@ -4,11 +4,58 @@
     <%@include file="/common/header.jsp"%>
     <title>用户管理</title>
     <script type="text/javascript" src="${basePath }/js/datepicker/WdatePicker.js"></script>
-    
-    
+    <script type="text/javascript">
+    var vResult = false;
+    	//校验帐号唯一
+    	function doVerify(){
+    		//1、获取帐号
+    		var account = $("#account").val();
+    		if(account != ""){
+    			//2、校验 
+    			$.ajax({
+    				url:"${basePath}/nsfw/user_verifyAccount.action",
+    				data: {"user.account": account},
+    				type: "post",
+    				async: false,//非异步
+    				success: function(msg){
+    					if("true" != msg){
+    						//帐号已经存在
+    						alert("帐号已经存在。请使用其它帐号！");
+    						//定焦
+    						$("#account").focus();
+    						vResult = false;
+    					} else {
+    						vResult = true;
+    					}
+    				}
+    			});
+    		}
+    	}
+    	//提交表单
+    	function doSubmit(){
+    		var name = $("#name");
+    		if(name.val() == ""){
+    			alert("用户名不能为空！");
+    			name.focus();
+    			return false;
+    		}
+    		var password = $("#password");
+    		if(password.val() == ""){
+    			alert("密码不能为空！");
+    			password.focus();
+    			return false;
+    		}
+    		//帐号校验
+    		doVerify();
+    		if(vResult){
+	    		//提交表单
+	    		document.forms[0].submit();
+    		}
+    	}
+    </script>
 </head>
 <body class="rightBody">
-<form id="form" name="form" action="${basePath }/nsfw/user_save.action" method="post" enctype="multipart/form-data">
+<form id="form" name="form" action="${basePath }/nsfw/user_add.action" method="post" enctype="multipart/form-data">
     <div class="p_d_1">
         <div class="p_d_1_1">
             <div class="content_info">
@@ -17,13 +64,7 @@
     <table id="baseInfo" width="100%" align="center" class="list" border="0" cellpadding="0" cellspacing="0"  >
         <tr>
             <td class="tdBg" width="200px">所属部门：</td>
-            <td>
-            <select name="user.dept">
-           		 <option value="部门A">部门A</option>
-           		  <option value="部门A1">部门A1</option>
-           		   <option value="部门A2">部门A2</option>
-           		    <option value="部门A3">部门A3</option>
-            </select></td>
+            <td><s:select name="user.dept" list="#{'部门A':'部门A','部门B':'部门B' }"/></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">头像：</td>
@@ -33,71 +74,53 @@
         </tr>
         <tr>
             <td class="tdBg" width="200px">用户名：</td>
-            <td><input type="text" name="user.name"/> </td>
+            <td><s:textfield id="name" name="user.name"/> </td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">帐号：</td>
-            <td><input type="text"  name="user.account" id="verify" onblur='doverify();'></td>
+            <td><s:textfield id="account" name="user.account" onchange="doVerify()"/></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">密码：</td>
-            <td><input type="text"  name="user.password"/></td>
+            <td><s:textfield id="password" name="user.password"/></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">性别：</td>
-            <td>男<input type="radio"  name="user.gender" value="true"/>
-          		  女<input type="radio"  name="user.gender" value="false"/></td>
-             
+            <td><s:radio list="#{'true':'男','false':'女'}" name="user.gender"/></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">角色：</td>
-            <td></td>
+            <td>
+            	<s:checkboxlist list="#roleList" name="userRoleIds" listKey="roleId" listValue="name"></s:checkboxlist>
+            </td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">电子邮箱：</td>
-            <td><input type="text" name="user.email"/></td>
+            <td><s:textfield name="user.email"/></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">手机号：</td>
-            <td><input type="text" name="user.mobile"/></td>
+            <td><s:textfield name="user.mobile"/></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">生日：</td>
-            <td><input type="text" id="birthday" name="user.birthday" readonly="true" onfocus="WdatePicker({'skin':'whyGreen','dateFmt':'yyyy-MM-dd'});" /></td>
+            <td><s:textfield id="birthday" name="user.birthday" readonly="true" onfocus="WdatePicker({'skin':'whyGreen','dateFmt':'yyyy-MM-dd'});" /></td>
         </tr>
-		
+		<tr>
+            <td class="tdBg" width="200px">状态：</td>
+            <td><s:radio list="#{'1':'有效','0':'无效'}" name="user.state" value="1"/></td>
+        </tr>
         <tr>
             <td class="tdBg" width="200px">备注：</td>
-            <td><input type="text" name="user.memo" cols="75" rows="3"/></td>
+            <td><s:textarea name="user.memo" cols="75" rows="3"/></td>
         </tr>
     </table>
     <div class="tc mt20">
-        <input type="submit" class="btnB2" value="保存" />
+        <input type="button" class="btnB2" value="保存" onclick="doSubmit()" />
         &nbsp;&nbsp;&nbsp;&nbsp;
         <input type="button"  onclick="javascript:history.go(-1)" class="btnB2" value="返回" />
     </div>
     </div></div></div>
 </form>
-<script type="text/javascript">
-
-    $('#verify').blur(function() {
-    	var account = jQuery("#verify").val(); 
-     	if(account != ""){
-    		jQuery.ajax({
-    			url:"${basePath }/nsfw/user_verifyAccount.action",
-    			dataType:"json",
-    			data:{"user.Account":account},
-    			type:"post",
-    			async:false,      /* 默认为true异步 */
-    			success:function(msg){  		
-    				if(!msg){
-    					alert("账号已存在");
-    					jQuery("#verify").focus();
-    				}
-    			}
-    		});
-    	} 
-    } );
- </script>
 </body>
 </html>
