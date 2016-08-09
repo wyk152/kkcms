@@ -1,0 +1,80 @@
+<!--
+/*
+ * $Id: struts.xml 1311902 2012-04-10 18:20:25Z lukaszlenart $
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+-->
+<!DOCTYPE struts PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+          "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+
+	<!-- 禁用动态方法访问 -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<!-- 配置开发模式 -->
+	<!-- <constant name="struts.devMode" value="true"></constant> -->
+	<!-- 配置拓展名未action -->
+	<constant name="struts.action.extention" value="action"></constant>
+	<!-- 把主题配置成simple -->
+	<constant name="struts.ui.theme" value="simple" ></constant>
+	
+    <!-- <package name="test_action" namespace="/" extends="struts-default">
+        <action name="hello" class="cn.itcast.test.action.testAction" method="wykTest">
+            <result name="login">hello.jsp</result>
+        </action>
+    </package> -->
+	 <include file="org/wyk/nsfw/*/config/*-struts.xml"></include>
+<!--   <package name="user-action" namespace="/" extends="struts-default">
+		<action name="hello" class="cn.itcast.test.action.testAction" method="wykTest">
+			<result name="{1}">/WEB-INF/jsp/nsfw/user/{1}.jsp</result>
+			<result name="list" type="redirectAction">
+				<param name="actionName">user_listUI</param>
+			</result>
+			<result name="login">index.jsp</result>
+			
+		</action>
+		<action name="hello1" class="org.wyk.nsfw.user.action.UserAction" method="save">
+			<result name="{1}">/WEB-INF/jsp/nsfw/user/{1}.jsp</result>
+			<result name="list" type="redirectAction">
+				<param name="actionName">user_listUI</param>
+			</result>
+			<result name="sus">index.jsp</result>
+			
+		</action>
+  </package> -->
+  
+  	<!-- 配置全局结果及异常映射 -->
+	<package name="base-default" extends="struts-default">
+		<!-- 返回结果类型 -->
+		<result-types>
+			<result-type name="error" class="org.wyk.main.action.SysResultAction"></result-type>
+		</result-types>
+		<!-- 全局返回结果 -->
+		<global-results>
+			<result name="error" type="error">/WEB-INF/jsp/error.jsp</result>
+			<result name="sysError">/WEB-INF/jsp/error.jsp</result>
+			<result name="input">/WEB-INF/jsp/error.jsp</result>
+		</global-results>
+		<!-- 全局异常映射 -->
+		<global-exception-mappings>
+			<exception-mapping result="sysError" exception="cn.itcast.core.exception.SysException"></exception-mapping>
+			<exception-mapping result="input" exception="java.lang.Exception"></exception-mapping>
+		</global-exception-mappings>
+	</package>
+</struts>

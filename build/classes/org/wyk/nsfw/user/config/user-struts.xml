@@ -1,0 +1,19 @@
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<package name="user-action" namespace="/nsfw" extends="base-default">
+		<action name="user_*" class="org.wyk.nsfw.user.action.UserAction" method="{1}"><!-- 占位符  -->
+			<!-- <result name="{1}">/WEB-INF/jsp/nsfw/user/{1}.jsp</result>
+			<result name="list" type="redirectAction">
+				<param name="actionName">user_listUI</param>
+			</result> -->
+			<result name="listUI">/WEB-INF/jsp/nsfw/user/listUI.jsp</result>
+			<result name="editUI">/WEB-INF/jsp/nsfw/user/editUI.jsp</result>
+			<result name="addUI">/WEB-INF/jsp/nsfw/user/addUI.jsp</result>
+			<result name="login">/login.jsp</result>
+		</action>
+	</package>
+
+</struts>
