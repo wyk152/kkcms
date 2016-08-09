@@ -40,6 +40,9 @@
         </action>
     </package> -->
 	 <include file="org/wyk/nsfw/*/config/*-struts.xml"></include>
+	 <include file="org/wyk/home/conf/*-struts.xml"></include>
+	 <include file="org/wyk/login/config/*-struts.xml"></include>
+	 
 <!--   <package name="user-action" namespace="/" extends="struts-default">
 		<action name="hello" class="cn.itcast.test.action.testAction" method="wykTest">
 			<result name="{1}">/WEB-INF/jsp/nsfw/user/{1}.jsp</result>
@@ -73,7 +76,7 @@
 		</global-results>
 		<!-- 全局异常映射 -->
 		<global-exception-mappings>
-			<exception-mapping result="sysError" exception="cn.itcast.core.exception.SysException"></exception-mapping>
+			<exception-mapping result="sysError" exception="org.wyk.main.action.SysResultAction"></exception-mapping>
 			<exception-mapping result="input" exception="java.lang.Exception"></exception-mapping>
 		</global-exception-mappings>
 	</package>

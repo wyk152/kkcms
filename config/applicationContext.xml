@@ -104,6 +104,8 @@
     <bean id="baseDao" abstract="true">
     	<property name="sessionFactory" ref="sessionFactory"></property>
     </bean>
+        <!-- 权限鉴定类 -->
+    <bean id="permissionCheck" class="org.wyk.main.permission.impl.PermissionCheckImpl"></bean>
     
     <!-- 引入外部sprign配置文件 -->
 	 <import resource="classpath:org/wyk/nsfw/*/config/*-spring.xml"/>
