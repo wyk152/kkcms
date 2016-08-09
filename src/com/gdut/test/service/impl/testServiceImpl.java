@@ -1,8 +1,9 @@
 package com.gdut.test.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import org.wyk.main.service.impl.BaseServiceImpl;
 
 import com.gdut.test.entity.Person;
 import com.gdut.test.service.TestService;
@@ -13,7 +14,7 @@ import com.gdut.test.service.TestService;
  * @time 2016年6月1日
  */
 @Service("testService")
-public class testServiceImpl extends BaseServiceImpl<Person> implements TestService {
+public class testServiceImpl implements TestService {
 
 	/*@Resource
 	BaseDao<Person> testdao;*/
@@ -21,6 +22,36 @@ public class testServiceImpl extends BaseServiceImpl<Person> implements TestServ
 	public void say() {
 		// TODO Auto-generated method stub
 		System.out.println("hello:service.....");
+	}
+
+	@Override
+	public void deleteById(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Person findById(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void save(Person person) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Person p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Person> findObjects() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/*

@@ -28,34 +28,29 @@ public abstract class BaseDaoImpl<T> extends HibernateDaoSupport implements Base
 		ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
 		this.clazz = (Class<T>) pt.getActualTypeArguments()[0];
 	}
+
 	@Override
-	public  void save(T entity) {
-		// TODO Auto-generated method stub
+	public void save(T entity) {
 		getHibernateTemplate().save(entity);
 	}
 
 	@Override
 	public void update(T entity) {
-		// TODO Auto-generated method stub
 		getHibernateTemplate().update(entity);
 	}
 
 	@Override
 	public void delete(Serializable id) {
-		// TODO Auto-generated method stub
-		getHibernateTemplate().delete(findById(id));
+		getHibernateTemplate().delete(findObjectById(id));
 	}
 
 	@Override
-	public T findById(Serializable id) {
-		// TODO Auto-generated method stub
-		return  getHibernateTemplate().get(clazz, id);
+	public T findObjectById(Serializable id) {
+		return getHibernateTemplate().get(clazz, id);
 	}
-	
+
 	@Override
 	public List<T> findObjects() {
-		// TODO Auto-generated method stub
-		/*System.out.println("---" + clazz.getSimpleName());*/
 		Query query = getSession().createQuery("FROM " + clazz.getSimpleName());
 		return query.list();
 	}

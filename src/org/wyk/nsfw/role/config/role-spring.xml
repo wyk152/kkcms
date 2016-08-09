@@ -12,7 +12,6 @@
     
     <bean id="roleDao" class="org.wyk.nsfw.role.dao.impl.RoleDaoImpl" parent="baseDao">
 
-		<property name="sessionFactory" ref="sessionFactory"></property>
     </bean>
     
     <!-- 扫描service -->

@@ -8,7 +8,7 @@
 		<action name="role_*" class="org.wyk.nsfw.role.action.RoleAction" method="{1}">
 			<result name="{1}">/WEB-INF/jsp/nsfw/role/{1}.jsp</result>
 			<result name="list" type="redirectAction">
-				<param name="actionName">role_lisstUI</param>
+				<param name="actionName">role_listUI</param>
 			</result>
 			
 		</action>
