@@ -52,6 +52,8 @@
             </td>
         </tr>
     </table>
+    <s:hidden name="strTitle"/>
+    <s:hidden name="pageNo"/>
     <s:hidden name="info.infoId"/>
     <s:hidden name="info.state"/>
     <div class="tc mt20">

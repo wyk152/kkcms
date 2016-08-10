@@ -13,22 +13,38 @@
 	}
   	//新增
   	function doAdd(){
-  		document.forms[0].action = "${basePath}/nsfw/info_addUI.action";
+  		document.forms[0].action = "${basePath}/nsfw/info_addUI.action?pageNo=" + ${pageResult.pageNo};
   		document.forms[0].submit();
   	}
   	//编辑
   	function doEdit(id){
-  		document.forms[0].action = "${basePath}/nsfw/info_editUI.action?info.infoId=" + id;
+  		document.forms[0].action = "${basePath}/nsfw/info_editUI.action?info.infoId=" + id +"&pageNo=" + ${pageResult.pageNo};
   		document.forms[0].submit();
   	}
+  	
+  	
+  	//搜索
+  	function doSearch(id){
+  		document.forms[0].action = "${basePath}/nsfw/info_listUI.action";
+  		document.forms[0].submit();
+  	}
+  	/* 翻页 */
+  	function doGoPage(pageNO){
+  		document.forms[0].action = "${basePath}/nsfw/info_listUI.action?pageNo=" + pageNO;
+  		document.forms[0].submit();
+  	}
+  	
+  	
   	//删除
   	function doDelete(id){
-  		document.forms[0].action = "${basePath}/nsfw/info_delete.action?info.infoId=" + id;
+  		var currentPageNo = ${pageResult.pageNo};
+  		
+  		document.forms[0].action = "${basePath}/nsfw/info_delete.action?info.infoId=" + id +"&pageNo=" + currentPageNo;
   		document.forms[0].submit();
   	}
   	//批量删除
   	function doDeleteAll(){
-  		document.forms[0].action = "${basePath}/nsfw/info_deleteSelected.action";
+  		document.forms[0].action = "${basePath}/nsfw/info_deleteSelected.action?pageNo=" + ${pageResult.pageNo};
   		document.forms[0].submit();
   	}
   	//异步发布信息,信息的id及将要改成的信息状态
@@ -85,7 +101,7 @@
                             <td width="80" align="center">状态</td>
                             <td width="120" align="center">操作</td>
                         </tr>
-                        <s:iterator value="infoList" status="st">
+                        <s:iterator value="pageResult.items" status="st">
                             <tr <s:if test="#st.odd"> bgcolor="f8f8f8" </s:if> >
                                 <td align="center"><input type="checkbox" name="selectedRow" value="<s:property value='infoId'/>"/></td>
                                 <td align="center"><s:property value="title"/></td>
@@ -112,12 +128,23 @@
                 </div>
             </div>
         <div class="c_pate" style="margin-top: 5px;">
+         <s:hidden name="strTitle"/>
+         <s:hidden name="strPageNo"/>
+        
 		<table width="100%" class="pageDown" border="0" cellspacing="0"
 			cellpadding="0">
 			<tr>
 				<td align="right">
-                 	总共1条记录，当前第 1 页，共 1 页 &nbsp;&nbsp;
-                            <a href="#">上一页</a>&nbsp;&nbsp;<a href="#">下一页</a>
+                 	总共<s:property value="pageResult.totalCount"/>条记录
+                 	，当前第 <s:property value="pageResult.pageNo"/> 页，
+                 	共  <s:property value="pageResult.totalPageCount"/> 页 &nbsp;&nbsp;
+                 	<s:if test="pageResult.pageNo > 1">
+                            <a href="javaScript:doGoPage('<s:property value="pageResult.pageNo-1"/>')">上一页
+                            </a>
+                     </s:if>
+                     <s:if test="pageResult.pageNo < pageResult.totalPageCount">
+                      &nbsp;&nbsp;<a href="javaScript:doGoPage('<s:property value="pageResult.pageNo+1"/>')">下一页</a>
+                      </s:if>
 					到&nbsp;<input type="text" style="width: 30px;" onkeypress="if(event.keyCode == 13){doGoPage(this.value);}" min="1"
 					max="" value="1" /> &nbsp;&nbsp;
 			    </td>

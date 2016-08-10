@@ -3,6 +3,9 @@ package org.wyk.main.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import org.wyk.main.util.PageResult;
+import org.wyk.main.util.QueryHelper;
+
 /**
  * 
  * @author wyk
@@ -20,6 +23,8 @@ public interface BaseDao<T> {
 	public T findObjectById(Serializable id);
 	//查找列表
 	public List<T> findObjects();
-
 	
+	public List<T> findObjectsList(QueryHelper queryHelper);
+	//分页查询数据
+	PageResult findObjectsList(QueryHelper queryHelper, int pageNo, int pageSize);
 }

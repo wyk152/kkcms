@@ -53,6 +53,8 @@
     </table>
     <!-- 默认信息状态为 发布 -->
     <s:hidden name="info.state" value="1"/>
+     <s:hidden name="strTitle"/>
+     <s:hidden name="pageNo"/>
     <div class="tc mt20">
         <input type="submit" class="btnB2" value="保存" />
         &nbsp;&nbsp;&nbsp;&nbsp;

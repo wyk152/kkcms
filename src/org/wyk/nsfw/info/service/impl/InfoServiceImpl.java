@@ -6,6 +6,8 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.wyk.main.util.PageResult;
+import org.wyk.main.util.QueryHelper;
 import org.wyk.nsfw.info.dao.InfoDao;
 import org.wyk.nsfw.info.entity.Info;
 import org.wyk.nsfw.info.service.InfoService;
@@ -40,6 +42,18 @@ public class InfoServiceImpl implements InfoService {
 	@Override
 	public List<Info> findObjects() {
 		return infoDao.findObjects();
+	}
+
+	@Override
+	public List<Info> findObjectsList(QueryHelper queryHelper) {
+		// TODO Auto-generated method stub
+		return infoDao.findObjectsList(queryHelper);
+	}
+
+	@Override
+	public PageResult findObjectsList(QueryHelper queryHelper, int pageNo, int pageSize) {
+		// TODO Auto-generated method stub
+		return infoDao.findObjectsList(queryHelper,pageNo, pageSize);
 	}
 
 }
