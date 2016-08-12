@@ -2,7 +2,6 @@ package org.wyk.nsfw.user.service.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -15,8 +14,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wyk.main.exception.ServiceException;
+import org.wyk.main.service.impl.BaseServiceImpl;
 import org.wyk.main.util.ExcelUtil;
 import org.wyk.nsfw.role.entity.Role;
 import org.wyk.nsfw.user.dao.UserDao;
@@ -27,36 +27,19 @@ import org.wyk.nsfw.user.service.UserService;
 
 
 @Service("userService")
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
 	
-	@Resource 
+	/*注解扫描时，创建了userdao对象，但是使用useDao对象的时候需要basedao对象，
+	 * 所以要在注入basedao对象
+	 * 使用 autowired进行注解行可以进行对象的自动装配，不需要set方法，直接在useDaom，baseDao属性上加注解；
+	 * 使用resource进行注解时，要添加set方法，并且注解加在set方法上	 
+	 */
+	//@Autowired
 	private UserDao userDao;
-
-	@Override
-	public void save(User user) {
-		userDao.save(user);
-	}
-
-	@Override
-	public void update(User user) {
-		userDao.update(user);
-	}
-
-	@Override
-	public void delete(Serializable id) {
-		userDao.delete(id);
-		//删除用户对应的所有权限
-		userDao.deleteUserRoleByUserId(id);
-	}
-
-	@Override
-	public User findObjectById(Serializable id) {
-		return userDao.findObjectById(id);
-	}
-
-	@Override
-	public List<User> findObjects() throws ServiceException {
-		return userDao.findObjects();
+	@Resource
+	public void setUserDao(UserDao userDao) {
+		super.setBaseDao(userDao);
+		this.userDao = userDao;
 	}
 
 	@Override

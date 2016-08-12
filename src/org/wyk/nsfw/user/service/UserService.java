@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.ServletOutputStream;
 
 import org.wyk.main.exception.ServiceException;
+import org.wyk.main.service.BaseService;
 import org.wyk.nsfw.user.entity.User;
 import org.wyk.nsfw.user.entity.UserRole;
 /**
@@ -15,18 +16,9 @@ import org.wyk.nsfw.user.entity.UserRole;
  * @author wyk
  * @time 2016年6月2日
  */
-public interface UserService{
+public interface UserService extends BaseService<User>{
 
-	//新增
-	public void save(User user);
-	//更新
-	public void update(User user);
-	//根据id删除
-	public void delete(Serializable id);
-	//根据id查找
-	public User findObjectById(Serializable id);
-	//查找列表
-	public List<User> findObjects() throws ServiceException;
+
 	//导出用户列表
 	public void exportExcel(List<User> userList, ServletOutputStream outputStream);
 	//导入用户列表

@@ -2,9 +2,14 @@ package com.gdut.test.service.impl;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Service;
+import org.wyk.main.service.impl.BaseServiceImpl;
+import org.wyk.nsfw.user.entity.User;
 
-
+import com.gdut.test.dao.TestDao;
 import com.gdut.test.entity.Person;
 import com.gdut.test.service.TestService;
 
@@ -13,66 +18,19 @@ import com.gdut.test.service.TestService;
  * @author wyk
  * @time 2016年6月1日
  */
+/**
+ * @author wangyankai
+ *
+ */
 @Service("testService")
 public class testServiceImpl implements TestService {
 
-	/*@Resource
-	BaseDao<Person> testdao;*/
-	@Override
-	public void say() {
-		// TODO Auto-generated method stub
-		System.out.println("hello:service.....");
-	}
+	@Resource
+	TestDao testDao;
 
-	@Override
-	public void deleteById(String id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Person findById(String string) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void save(Person person) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void update(Person p) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<Person> findObjects() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	@Override
-	public Person findById(String id) {
-		// TODO Auto-generated method stub
-		return (Person) testdao.findById(id);
-	}
-
-	@Override
 	public void save(Person entity) {
 		// TODO Auto-generated method stub
-		testdao.save(entity);
+		testDao.save(entity);
 	}
-
-	@Override
-	public Person find( String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
-
-
 
 }

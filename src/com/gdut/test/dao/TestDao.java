@@ -1,6 +1,7 @@
 package com.gdut.test.dao;
 
 import org.wyk.main.dao.BaseDao;
+import org.wyk.nsfw.user.entity.User;
 
 import com.gdut.test.entity.Person;
 
@@ -12,4 +13,5 @@ import com.gdut.test.entity.Person;
  */
 public interface TestDao extends BaseDao<Person>{
 
+	public void save(Person entity);
 }

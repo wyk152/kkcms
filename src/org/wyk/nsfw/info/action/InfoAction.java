@@ -1,9 +1,7 @@
 package org.wyk.nsfw.info.action;
 
-import java.io.IOException;
 import java.net.URLDecoder;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +10,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
-import org.junit.Ignore;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.wyk.main.action.BaseAction;
 import org.wyk.main.util.PageResult;
 import org.wyk.main.util.QueryHelper;
@@ -24,39 +22,15 @@ import com.opensymphony.xwork2.ActionContext;
 
 public class InfoAction extends BaseAction {
 
-	@Resource
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@Autowired
 	private InfoService infoService;
+	
 	private List<Info> infoList;
-	private PageResult pageResult;
 
-	public int getPageNo() {
-		return pageNo;
-	}
-
-	public void setPageNo(int pageNo) {
-		this.pageNo = pageNo;
-	}
-
-	public void setPageNo(String pageNo) {
-		if (StringUtil.isNotBlank(pageNo)) {
-			this.pageNo = Integer.parseInt(pageNo);
-		}
-	}
-
-	public int getPageSize() {
-		if (pageSize < 1) {
-			pageSize = DEFAULT_PAGE_SIZE;
-		}
-		return pageSize;
-	}
-
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-	}
-
-	private int pageNo;
-	private int pageSize;
-	public static int DEFAULT_PAGE_SIZE = 3;
 	private Info info;
 	private String[] privilegeIds;
 	private String strTitle;
@@ -94,7 +68,7 @@ public class InfoAction extends BaseAction {
 
 				}
 			}
-			queryHelper.addOrderByProperty("i.createTime", queryHelper.ORDER_BY_DESC);
+			queryHelper.addOrderByProperty("i.createTime", QueryHelper.ORDER_BY_DESC);
 			// hql += " ORDER BY i.createTime DESC";
 			// infoList = infoService.findObjectsList(queryHelper);
 			pageResult = infoService.findObjectsList(queryHelper, getPageNo(), getPageSize());

@@ -14,7 +14,7 @@ public class QueryHelper {
 	
 	private List<Object> parameters;
 	//排序顺序
-	public static String ORDER_BY_DESC = "DESC";//降序
+	public static  String ORDER_BY_DESC = "DESC";//降序
 	public static String ORDER_BY_ASC = "ASC";//升序
 	
 	/**
@@ -22,7 +22,7 @@ public class QueryHelper {
 	 * @param clazz 实体类
 	 * @param alias 实体类对应的别名
 	 */
-	public QueryHelper(Class clazz, String alias){
+	public QueryHelper(Class<?> clazz, String alias){
 		fromClause = "FROM " + clazz.getSimpleName() + " " + alias;
 	}
 	

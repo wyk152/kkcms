@@ -12,7 +12,10 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.wyk.nsfw.user.entity.User;
-
+/**
+ * @author wyk
+ * @time  2016年6月12日
+ */
 public class ExcelUtil {
 
 	/**
